@@ -75,3 +75,59 @@ CREATE TABLE IF NOT EXISTS Ejemplares (
             ON UPDATE CASCADE
             ON DELETE RESTRICT
 );
+
+-- 9. Crear la tabla Prestamos
+CREATE TABLE IF NOT EXISTS Prestamos (
+    Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    UsuarioId INT UNSIGNED NOT NULL,
+    ClienteId INT UNSIGNED NOT NULL,
+    FechaDeSalida DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FechaDeRetorno DATETIME DEFAULT NULL,
+    FechaLimite DATETIME NOT NULL,
+    Tipo ENUM('Interno', 'Externo') NOT NULL,
+    CONSTRAINT FK_Prestamos_Usuarios
+        FOREIGN KEY (UsuarioId)
+        REFERENCES Usuarios (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT,
+    CONSTRAINT FK_Prestamos_Clientes
+        FOREIGN KEY (ClienteId)
+        REFERENCES Clientes (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
+);
+
+-- 10. Crear tablas AutoresLibros
+CREATE TABLE IF NOT EXISTS AutoresLibros (
+    AutorId INT UNSIGNED,
+    LibroId INT UNSIGNED,
+    PRIMARY KEY (AutorId, LibroId),
+    CONSTRAINT FK_AutoresLibros_Autores
+        FOREIGN KEY (AutorId)
+        REFERENCES Autores (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT,
+    CONSTRAINT FK_AutoresLibros_Libros
+        FOREIGN KEY (LibroId)
+        REFERENCES Libros (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
+);
+
+-- 11. Crear tablas EjemplarPrestamo
+CREATE TABLE IF NOT EXISTS EjemplaresPrestamos (
+    EjemplarId INT UNSIGNED,
+    PrestamoId INT UNSIGNED,
+    Condiciones VARCHAR(200) NOT NULL,
+    PRIMARY KEY (EjemplarId, PrestamoId),
+    CONSTRAINT FK_EjemplaresPrestamos_Ejemplares
+        FOREIGN KEY (EjemplarId)
+        REFERENCES Ejemplares (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT,
+    CONSTRAINT FK_EjemplaresPrestamos_Prestamos
+        FOREIGN KEY (PrestamoId)
+        REFERENCES Prestamos (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
+);

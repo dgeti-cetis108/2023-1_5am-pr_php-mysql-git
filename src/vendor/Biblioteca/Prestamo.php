@@ -10,6 +10,5 @@ class Prestamo
     public $FechaDeSalida;
     public $FechaDeRetorno;
     public $FechaLimite;
-    public $Estatus;
     public $Tipo; // Interno, Externo
 }
